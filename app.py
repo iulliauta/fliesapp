@@ -4,7 +4,6 @@ import os
 import socket
 import random
 import json
-import logging
 
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
@@ -13,35 +12,34 @@ hostname = socket.gethostname()
 app = Flask(__name__)
 
 def get_redis():
-    if not hasattr(g, 'redis'):
-        g.redis = Redis(host="redis", db=0, socket_timeout=5)
-    return g.redis
+	if not hasattr(g, 'redis'):
+	g.redis = Redis(host="redis", db=0, socket_timeout=5)
+	return g.redis
 
 @app.route("/", methods=['POST','GET'])
 def hello():
-    voter_id = request.cookies.get('voter_id')
-    if not voter_id:
-        voter_id = hex(random.getrandbits(64))[2:-1]
+	voter_id = request.cookies.get('voter_id')
+	if not voter_id:
+		voter_id = hex(random.getrandbits(64))[2:-1]
 
-    plecare = None
-    intoarcere = None
+	plecare = None
+	intoarcere = None
 
-    if request.method == 'POST':
-        redis = get_redis()
-        plecare = request.form['plecare']
-        intoarcere = request.form['intoarcere']
-        logging.error('PLecare:' + plecare + ' Intoarcere:' + intoarcere)
-        data = json.dumps({'voter_id': voter_id, 'plecare': plecare, 'intoarcere':intoarcere})
-        redis.rpush('entries', data)
+	if request.method == 'POST':
+		redis = get_redis()
+		plecare = request.form['plecare']
+		intoarcere = request.form['intoarcere']
+		data = json.dumps({'voter_id': voter_id, 'plecare': plecare, 'intoarcere':intoarcere})
+		redis.rpush('entries', data)
 
-    resp = make_response(render_template(
-        'index.html',
-        hostname=hostname,
-        plecare=plecare
-	intoarcere=intoarcere,
-    ))
-    resp.set_cookie('voter_id', voter_id)
-    return resp
+	resp = make_response(render_template(
+		'index.html',
+		hostname=hostname,
+		plecare=plecare,
+		intoarcere=intoarcere,
+	))
+	resp.set_cookie('voter_id', voter_id)
+	return resp
 
 
 if __name__ == "__main__":
