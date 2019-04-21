@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>{{option_a}} vs {{option_b}}!</title>
+    <title>Afla urmatoarea destinatie de vacanta</title>
     <base href="/index.html">
     <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
     <meta name="keywords" content="docker-compose, docker, stack">
@@ -13,13 +13,14 @@
   <body>
     <div id="content-container">
       <div id="content-container-center">
-        <h3>{{option_a}} vs {{option_b}}!</h3>
+        <h3>Adauga data plecarii si data sosirii:</h3>
         <form id="choice" name='form' method="POST" action="/">
-          <button id="a" type="submit" name="vote" class="a" value="a">{{option_a}}</button>
-          <button id="b" type="submit" name="vote" class="b" value="b">{{option_b}}</button>
+          <input id="plecare" type="text" name="plecare" placeholder="Data plecare">
+          <input id="intoarcere" type="text" name="intoarcere" placeholder="Data intoarcere">
+	  <button id="a" type="submit" name="send" class="a" value="a">Gaseste zbor</button>
         </form>
         <div id="tip">
-          (Tip: you can change your vote)
+          (Tip: you can enter your info only once)
         </div>
         <div id="hostname">
           Processed by container ID {{hostname}}
@@ -31,17 +32,12 @@
 
     {% if vote %}
     <script>
-      var vote = "{{vote}}";
+      var plecare = "{{plecare}}",
+	  intoarcere = "{{intoarcere}}";
 
-      if(vote == "a"){
+      if(plecare != "" && intoarcere != ""){
         $(".a").prop('disabled', true);
-        $(".a").html('{{option_a}} <i class="fa fa-check-circle"></i>');
-        $(".b").css('opacity','0.5');
-      }
-      if(vote == "b"){
-        $(".b").prop('disabled', true);
-        $(".b").html('{{option_b}} <i class="fa fa-check-circle"></i>');
-        $(".a").css('opacity','0.5');
+        $("#tip").html('Cererea pentru perioada {{plecare}} - {{intoarcere}} a fost trimisa. Asteptati raspunsul. <i class="fa fa-check-circle"></i>');
       }
     </script>
     {% endif %}
