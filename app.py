@@ -36,7 +36,8 @@ def hello():
     resp = make_response(render_template(
         'index.html',
         hostname=hostname,
-        plecare=plecare,
+        plecare=plecare
+	intoarcere=intoarcere,
     ))
     resp.set_cookie('voter_id', voter_id)
     return resp
