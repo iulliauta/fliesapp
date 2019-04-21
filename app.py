@@ -22,6 +22,7 @@ def hello():
 	if not voter_id:
 		voter_id = hex(random.getrandbits(64))[2:-1]
 
+
 	plecare = None
 	intoarcere = None
 
