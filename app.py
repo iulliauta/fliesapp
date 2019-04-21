@@ -26,16 +26,16 @@ def hello():
 
     if request.method == 'POST':
         redis = get_redis()
-        vote = request.form['vote']
-        data = json.dumps({'voter_id': voter_id, 'vote': vote})
-        redis.rpush('votes', data)
+        plecare = request.form['plecare']
+	intoarcere = request.form['intoarcere']
+        data = json.dumps({'voter_id': voter_id, 'plecare': plecare, 'intoarcere': intoarcere})
+        redis.rpush('entries', data)
 
     resp = make_response(render_template(
         'index.html',
-        option_a=option_a,
-        option_b=option_b,
         hostname=hostname,
-        vote=vote,
+        plecare=plecare,
+        intoarcere=intoarcere,
     ))
     resp.set_cookie('voter_id', voter_id)
     return resp
