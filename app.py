@@ -4,6 +4,7 @@ import os
 import socket
 import random
 import json
+import logging
 
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
@@ -22,24 +23,24 @@ def hello():
     if not voter_id:
         voter_id = hex(random.getrandbits(64))[2:-1]
 
-    vote = None
+    nume = None
 
     if request.method == 'POST':
         redis = get_redis()
         plecare = request.form['plecare']
-	intoarcere = request.form['intoarcere']
-        data = json.dumps({'voter_id': voter_id, 'plecare': plecare, 'intoarcere': intoarcere})
+        intoarcere = request.form['intoarcere']
+        logging.error('PLecare:' + plecare + ' Intoarcere:' + intoarcere)
+        data = json.dumps({'voter_id': voter_id, 'plecare': plecare, 'intoarcere':intoarcere})
         redis.rpush('entries', data)
 
     resp = make_response(render_template(
         'index.html',
         hostname=hostname,
         plecare=plecare,
-        intoarcere=intoarcere,
     ))
     resp.set_cookie('voter_id', voter_id)
     return resp
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=80, debug=True, threaded=True)
+app.run(host='0.0.0.0', port=80, debug=True, threaded=True)
