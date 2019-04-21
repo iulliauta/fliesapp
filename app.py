@@ -23,7 +23,8 @@ def hello():
     if not voter_id:
         voter_id = hex(random.getrandbits(64))[2:-1]
 
-    nume = None
+    plecare = None
+    intoarcere = None
 
     if request.method == 'POST':
         redis = get_redis()
